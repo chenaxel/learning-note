@@ -40,6 +40,11 @@
             <version>1.2.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.predic8</groupId>
+            <artifactId>soa-model-core</artifactId>
+            <version>1.6.0</version>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
