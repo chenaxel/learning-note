@@ -15,5 +15,4 @@ public class TestClass {
 		int a = 0;
 		System.gc();
 	}
-
 }
