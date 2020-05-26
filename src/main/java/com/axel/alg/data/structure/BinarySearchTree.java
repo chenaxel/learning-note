@@ -1,5 +1,6 @@
 package com.axel.alg.data.structure;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -13,6 +14,10 @@ public class BinarySearchTree<T extends Comparable<T>> implements ITree<T> {
 	private int modifications;
 	private int size;
 	private Node<T> root;
+
+	public enum DepthSearchOrder {
+		preOrder, inOrder, postOrder;
+	}
 
 	@Override
 	public boolean add(T t) {
@@ -131,6 +136,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements ITree<T> {
 				right.parent = greatest;
 			}
 		}
+		modifications++;
 		size--;
 		return remove.value;
 	}
@@ -180,7 +186,31 @@ public class BinarySearchTree<T extends Comparable<T>> implements ITree<T> {
 
 	@Override
 	public boolean validate() {
-		return false;
+		if (root == null) {
+			return true;
+		}
+		return validateNode(root);
+	}
+
+	private boolean validateNode(Node<T> node) {
+		boolean less = true;
+		if (node.left != null) {
+			less = node.left.value.compareTo(node.value) <= 0;
+			if (less) {
+				less = validateNode(node.left);
+			}
+		}
+		if (!less) {
+			return false;
+		}
+		boolean great = true;
+		if (node.right != null) {
+			great = node.right.value.compareTo(node.value) > 0;
+			if (great) {
+				great = validateNode(node.right);
+			}
+		}
+		return great;
 	}
 
 	@Override
@@ -230,6 +260,105 @@ public class BinarySearchTree<T extends Comparable<T>> implements ITree<T> {
 			}
 		}
 		return null;
+	}
+
+	public T[] getBFS() {
+		return getBFS(root, size);
+	}
+
+	public T[] getDFS(DepthSearchOrder order) {
+		return getDFS(order, this);
+	}
+
+	private <T extends Comparable<T>> T[] getBFS(Node<T> start, int size) {
+
+		Deque<Node<T>> deque = new ArrayDeque<>();
+		final T[] values = (T[]) Array.newInstance(start.value.getClass(), size);
+		Node<T> node = start;
+		int count = 0;
+		while (node != null) {
+			values[count] = node.value;
+			if (node.left != null) {
+				deque.add(node.left);
+			}
+			if (node.right != null) {
+				deque.add(node.right);
+			}
+			if (!deque.isEmpty()) {
+				node = deque.pop();
+			} else {
+				node = null;
+			}
+			count++;
+		}
+		return values;
+	}
+
+	private <T extends Comparable<T>> T[] getDFS(DepthSearchOrder order, BinarySearchTree<T> bst) {
+
+		if (bst.size == 0) {
+			return null;
+		}
+		order = order == null ? DepthSearchOrder.inOrder : order;
+		T[] values = (T[]) Array.newInstance(bst.root.value.getClass(), bst.size);
+		Set<Node<T>> added = new HashSet<>();
+		int count = 0;
+		Node<T> node = bst.root;
+		switch (order) {
+			case preOrder:
+				while (count < bst.size && node != null) {
+					if (!added.contains(node)) {
+						values[count++] = node.value;
+						added.add(node);
+					} else if (node.left != null && !added.contains(node.left)) {
+						node = node.left;
+					} else if (node.right != null && !added.contains(node.right)) {
+						node = node.right;
+					} else if (added.contains(node)) {
+						node = node.parent;
+					} else {
+						node = null;
+					}
+				}
+				break;
+			case inOrder:
+				while (count < bst.size && node != null) {
+					if (node.left != null && !added.contains(node.left)) {
+						node = node.left;
+					} else {
+						if (!added.contains(node)) {
+							values[count++] = node.value;
+							added.add(node);
+						}
+						if (node.right != null && !added.contains(node.right)) {
+							node = node.right;
+						} else if (added.contains(node)) {
+							node = node.parent;
+						} else {
+							node = null;
+						}
+					}
+				}
+				break;
+			case postOrder:
+				while (count < bst.size && node != null) {
+					if (node.left != null && !added.contains(node.left)) {
+						node = node.left;
+					} else {
+						if (node.right != null && !added.contains(node.right)) {
+							node = node.right;
+						} else {
+							values[count++] = node.value;
+							added.add(node);
+							node = node.parent;
+						}
+					}
+				}
+				break;
+			default:
+				break;
+		}
+		return values;
 	}
 
 	protected static class TreePrinter {

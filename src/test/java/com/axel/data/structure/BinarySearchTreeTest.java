@@ -4,6 +4,8 @@ import com.axel.alg.data.structure.BinarySearchTree;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * des
  *
@@ -41,11 +43,42 @@ public class BinarySearchTreeTest {
 
 	@Test
 	public void remove() {
-		System.out.println(bst);
+		System.out.println(bst.remove(10));
 	}
 
 	@Test
 	public void toCollection() {
 		System.out.println(bst.toCollection());
+	}
+
+	@Test
+	public void size() {
+		System.out.println(bst.size());
+	}
+
+	@Test
+	public void clear() {
+		bst.clear();
+		System.out.println(bst);
+	}
+
+	@Test
+	public void validate() {
+		System.out.println(bst.validate());
+	}
+
+	@Test
+	public void testToString() {
+		System.out.println(bst);
+	}
+
+	@Test
+	public void getBFS() {
+		System.out.println(Arrays.toString(bst.getBFS()));
+	}
+
+	@Test
+	public void getDFS() {
+		System.out.println(Arrays.toString(bst.getDFS(BinarySearchTree.DepthSearchOrder.postOrder)));
 	}
 }
