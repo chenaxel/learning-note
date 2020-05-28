@@ -11,9 +11,9 @@ import java.util.*;
  */
 public class BinarySearchTree<T extends Comparable<T>> implements ITree<T> {
 
-	private int modifications;
-	private int size;
-	private Node<T> root;
+	protected int modifications;
+	protected int size;
+	protected Node<T> root;
 
 	public enum DepthSearchOrder {
 		preOrder, inOrder, postOrder;
@@ -25,7 +25,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements ITree<T> {
 		return true;
 	}
 
-	private Node<T> addValue(T value) {
+	protected Node<T> addValue(T value) {
 		Node<T> newNode = new Node<>(value);
 		if (root == null) {
 			root = newNode;
@@ -54,6 +54,57 @@ public class BinarySearchTree<T extends Comparable<T>> implements ITree<T> {
 				}
 				node = node.left;
 			}
+		}
+	}
+
+	protected void rotateLeft(Node<T> node) {
+		Node<T> parent = node.parent;
+		Node<T> left = node.right.left;
+		Node<T> right = node.right;
+
+		node.right.left = node;
+		node.parent = node.right;
+		node.right = left;
+
+		if (left != null) {
+			left.parent = node;
+		}
+		if (parent != null) {
+			if (node == parent.left) {
+				parent.left = right;
+				right.parent = parent.left;
+			}
+			if (node == parent.right) {
+				parent.right = right;
+				right.parent = parent.right;
+			}
+		} else {
+			root = right;
+			root.parent = null;
+		}
+	}
+
+	protected void rotateRight(Node<T> node) {
+		Node<T> parent = node.parent;
+		Node<T> right = node.left.right;
+		Node<T> left = node.left;
+
+		node.parent = left;
+		left.right = node;
+		node.left = right;
+		if (right != null) {
+			right.parent = node;
+		}
+		if (parent != null) {
+			if (node == parent.left) {
+				parent.left = left;
+			}
+			if (node == parent.right) {
+				parent.right = left;
+			}
+		} else {
+			root = left;
+			root.parent = null;
 		}
 	}
 
@@ -223,12 +274,12 @@ public class BinarySearchTree<T extends Comparable<T>> implements ITree<T> {
 		return TreePrinter.getString(this);
 	}
 
-	private static class Node<T extends Comparable<T>> {
+	protected static class Node<T extends Comparable<T>> {
 
-		private T value;
-		private Node<T> parent;
-		private Node<T> left = null;
-		private Node<T> right = null;
+		protected T value;
+		protected Node<T> parent;
+		protected Node<T> left = null;
+		protected Node<T> right = null;
 
 		public Node(T value) {
 			this.value = value;
