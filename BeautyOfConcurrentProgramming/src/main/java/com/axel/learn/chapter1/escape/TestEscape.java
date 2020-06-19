@@ -1,4 +1,4 @@
-package com.axel.learn.escape;
+package com.axel.learn.chapter1.escape;
 
 /**
  * this逃逸

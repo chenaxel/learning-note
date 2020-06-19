@@ -1,4 +1,4 @@
-package com.axel.learn.sleep;
+package com.axel.learn.chapter1.sleep;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

@@ -1,4 +1,4 @@
-package com.axel.learn.wait;
+package com.axel.learn.chapter1.wait;
 
 /**
  * des

@@ -1,4 +1,4 @@
-package com.axel.learn.notify;
+package com.axel.learn.chapter1.notify;
 
 /**
  * des
